@@ -12,7 +12,6 @@ namespace Íjász_adatbázis_kezelő
         {
             do
             {
-                bool accepted = false;
                 do
                 {
                     Console.Write("< Adatbázis neve: ");
@@ -31,7 +30,8 @@ namespace Íjász_adatbázis_kezelő
                     }
                     catch (Exception exception) { Console.WriteLine("> Hiba az adatbázis megnyitása során (#3)!\n" + exception.Message); continue; }
 
-                } while (!accepted);
+                    break;
+                } while (true);
 
                 FixDatabase();
             } while (true);
@@ -39,7 +39,46 @@ namespace Íjász_adatbázis_kezelő
 
         private static void FixDatabase()
         {
+            int version = 0;
+            SQLiteCommand command;
 
+            command = connection.CreateCommand();
+            command.CommandText = "SELECT VEALSZ FROM Verseny;";
+            try
+            {
+                SQLiteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    version = reader.GetInt32(0);
+                }
+            }
+            catch (SQLiteException) { version = 1; }
+            catch (Exception exception) { Console.WriteLine("> Hiba az adatbázis verziójának ellenőrzésekor! (#4)!\n" + exception.Message); return; }
+
+            Console.WriteLine("> Az adatbázis verziója: " + version);
+
+            switch (version)
+            {
+                case 1:
+                    command = connection.CreateCommand();
+                    command.CommandText = "CREATE TABLE Verzió (PRVERZ int); INSERT INTO Verzió (PRVERZ) VALUES (2); " +
+                        "ALTER TABLE Verseny ADD VEALSZ int; UPDATE Verseny SET VEALSZ = VEOSPO;";
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (SQLiteException exception) { Console.WriteLine("> Hiba az adatbázis módosításakor! (#5)!\n" + exception.Message); break; }
+                    break;
+            }
+
+            try
+            {
+                command.Dispose();
+                connection.Close();
+            }
+            catch (SQLiteException exception) { Console.WriteLine("> Hiba az adatbázis bezárásakor! (#6)!\n" + exception.Message); return; }
+
+            Console.WriteLine("> Sikeresen módosítottam az adatbázis verzióját 2-re!");
         }
     }
 }
