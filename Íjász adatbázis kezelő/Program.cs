@@ -43,7 +43,7 @@ namespace Íjász_adatbázis_kezelő
             SQLiteCommand command;
 
             command = connection.CreateCommand();
-            command.CommandText = "SELECT VEALSZ FROM Verseny;";
+            command.CommandText = "SELECT PRVERZ FROM Verzió;";
             try
             {
                 SQLiteDataReader reader = command.ExecuteReader();
