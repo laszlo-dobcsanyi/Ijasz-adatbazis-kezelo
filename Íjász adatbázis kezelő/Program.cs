@@ -62,7 +62,8 @@ namespace Íjász_adatbázis_kezelő
                 case 1:
                     command = connection.CreateCommand();
                     command.CommandText = "CREATE TABLE Verzió (PRVERZ int); INSERT INTO Verzió (PRVERZ) VALUES (2); " +
-                        "ALTER TABLE Verseny ADD VEALSZ int; UPDATE Verseny SET VEALSZ = VEOSPO;";
+                        "ALTER TABLE Verseny ADD VEALSZ int; UPDATE Verseny SET VEALSZ = 30;" +
+                        "ALTER TABLE Korosztályok ADD KONOK boolean; ALTER TABLE Korosztályok ADD KOFERF boolean; UPDATE Korosztályok SET KONOK = 1, KOFERF = 1;";
                     try
                     {
                         command.ExecuteNonQuery();
