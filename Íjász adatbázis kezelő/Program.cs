@@ -68,6 +68,8 @@ namespace Íjász_adatbázis_kezelő
                         command.ExecuteNonQuery();
                     }
                     catch (SQLiteException exception) { Console.WriteLine("> Hiba az adatbázis módosításakor! (#5)!\n" + exception.Message); break; }
+
+                    Console.WriteLine("> Sikeresen módosítottam az adatbázis verzióját 2-re!");
                     break;
             }
 
@@ -77,8 +79,6 @@ namespace Íjász_adatbázis_kezelő
                 connection.Close();
             }
             catch (SQLiteException exception) { Console.WriteLine("> Hiba az adatbázis bezárásakor! (#6)!\n" + exception.Message); return; }
-
-            Console.WriteLine("> Sikeresen módosítottam az adatbázis verzióját 2-re!");
         }
     }
 }
